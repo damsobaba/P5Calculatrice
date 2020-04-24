@@ -29,6 +29,7 @@ class ViewController: UIViewController {
         
         calculate.refresh()
         
+        
     }
     
     // View actions
@@ -72,7 +73,7 @@ extension ViewController: AlertDeleguate {
     }
     
     func alertMessage(text: String) {
-        let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Zéro!", message: text, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(alertVC, animated: true, completion: nil)
     }

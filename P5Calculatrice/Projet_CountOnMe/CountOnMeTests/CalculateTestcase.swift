@@ -40,23 +40,41 @@ class CalculateTestcase: XCTestCase {
     }
     
     
-    //    func testGivenCalculIsTwoMulipllyByTWO_WhenCalculate_ResultEqualFour() {
-    //        calcultest.text = calcultest.addNumber(numberText: "2")
-    //        calcultest.text = calcultest.addOperator(operatoree: .multiplication)
-    //        calcultest.text = calcultest.addNumber(numberText: "2")
-    //        calcultest.text = calcultest.total()
-    //        XCTAssert(calcultest.text == "2 * 2 = 4")
-    //
-    //    }
-    //
-    //    func testGivenCalculIsFourDividebyTwo_WhenCalculate_ResultIsTwo() {
-    //        calcultest.text = calcultest.addNumber(numberText: "4")
-    //        calcultest.text = calcultest.addOperator(operatoree: .division)
-    //        calcultest.text = calcultest.addNumber(numberText: "2")
-    //        calcultest.text = calcultest.total()
-    //        XCTAssert(calcultest.text == "4 ÷ 2 = 2")
-    //    }
+        func testGivenCalculIsTwoMulipllyByTWO_WhenCalculate_ResultEqualFour() {
+             calcultest.addNumber(numberText: "2")
+            calcultest.addOperator(operatoree: .multiplication)
+             calcultest.addNumber(numberText: "2")
+            calcultest.total()
+            XCTAssert(calcultest.text == "2 * 2 = 4.0")
     
+        }
+    
+        func testGivenCalculIsFourDividebyTwo_WhenCalculate_ResultIsTwo() {
+             calcultest.addNumber(numberText: "4")
+            calcultest.addOperator(operatoree: .division)
+             calcultest.addNumber(numberText: "2")
+            calcultest.total()
+            XCTAssert(calcultest.text == "4 ÷ 2 = 2.0")
+        }
+    
+    func testGivenWhenACButtonPressed_textViewIsEmpty() {
+        calcultest.addNumber(numberText: "4")
+        calcultest.addOperator(operatoree: .division)
+        calcultest.refresh()
+         XCTAssert(calcultest.text == "")
+        
+    }
+    
+    
+    
+    func testGivenWhenNumberIsDivideByZero_WhenCalculate_TexviewIsEmpty() {
+        
+        calcultest.addNumber(numberText: "8")
+        calcultest.addOperator(operatoree: .division)
+        calcultest.addNumber(numberText: "0")
+        calcultest.total()
+        XCTAssert(calcultest.text == "")
+    }
     //    
     //    func testGivenWhenResultIsDisplay_PressNewButtonNumber_TextViewDisplayNewButtonNumber() {
     //        

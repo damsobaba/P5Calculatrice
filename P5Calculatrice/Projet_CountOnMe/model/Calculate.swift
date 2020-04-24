@@ -78,12 +78,22 @@ class Calculate {
        
     }
     
-    func refresh ()   {
+   var divideByZero: Bool {
+        return text.contains("÷ 0")
+    }
+            
+    
         
+        
+        
+    
+    func refresh ()   {
         text = ""
     }
     
     func total()  {
+        
+
         guard expressionIsCorrect else {
             delegate?.alertMessage(text: "Entrez une expréssion correcte!")
             return
@@ -93,21 +103,27 @@ class Calculate {
             
             return
         }
+        guard !divideByZero else { // why exclamation point 
+                   delegate?.alertMessage(text: "La division par zéro n'existe pas")
+             text = ""
+            return
+        }
+        
         // Create local copy of operations
         var operationsToReduce = elements
-        
+//
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])! // debalé correctement
+            let left = Double(operationsToReduce[0])! // debalé correctement
             let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])! // debalé correctement
+            let right = Double(operationsToReduce[2])! // debalé correctement
             
-            let result: Float
+            let result: Double
             switch operand {
-            case "+": result = Float(left + right)
-            case "-": result = Float(left - right)
-            case "*": result = Float(left * right)
-            case "÷": result = Float(left / right)
+            case "+": result = left + right
+            case "-": result = left - right
+            case "*": result = left * right
+            case "÷": result = left / right
             default: return
             }
             
