@@ -162,5 +162,6 @@ class Calculate {
 
 
 
-
+// question pour seb :
+// NSnumber,  numberformateur reussir a avoir les 100% coverage
 

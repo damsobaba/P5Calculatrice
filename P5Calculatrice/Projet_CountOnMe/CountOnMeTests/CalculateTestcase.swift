@@ -20,6 +20,17 @@ class CalculateTestcase: XCTestCase {
         calcultest.addNumber(numberText: "1")
         XCTAssert(calcultest.text == "1")
     }
+    /// check if pass to knew operation after total
+    func testGivenCalculOnePlusOne_WhenAddTwo_ThenTextIsTwo(){
+        calcultest.addNumber(numberText: "1")
+        calcultest.addOperator(operatoree: .addition)
+        calcultest.addNumber(numberText: "1")
+        calcultest.total()
+        
+        calcultest.addNumber(numberText: "6")
+        
+        XCTAssert(calcultest.text == "6")
+    }
     
     /// add operateur plus test
     func testGivenCalculIsOnePlusOne_WhenCalculate_resultIsTwo() {
@@ -41,33 +52,40 @@ class CalculateTestcase: XCTestCase {
     }
     
     /// add operator multiply test
-        func testGivenCalculIsTwoMulipllyByTWO_WhenCalculate_ResultEqualFour() {
-             calcultest.addNumber(numberText: "2")
-            calcultest.addOperator(operatoree: .multiplication)
-             calcultest.addNumber(numberText: "2")
-            calcultest.total()
-            XCTAssert(calcultest.text == "2 * 2 = 4.0")
-    
-        }
+    func testGivenCalculIsTwoMulipllyByTWO_WhenCalculate_ResultEqualFour() {
+        calcultest.addNumber(numberText: "2")
+        calcultest.addOperator(operatoree: .multiplication)
+        calcultest.addNumber(numberText: "2")
+        calcultest.total()
+        XCTAssert(calcultest.text == "2 * 2 = 4.0")
+        
+    }
     
     /// add operator divide test
-        func testGivenCalculIsFourDividebyTwo_WhenCalculate_ResultIsTwo() {
-             calcultest.addNumber(numberText: "4")
-            calcultest.addOperator(operatoree: .division)
-             calcultest.addNumber(numberText: "2")
-            calcultest.total()
-            XCTAssert(calcultest.text == "4 ÷ 2 = 2.0")
-        }
+    func testGivenCalculIsFourDividebyTwo_WhenCalculate_ResultIsTwo() {
+        calcultest.addNumber(numberText: "4")
+        calcultest.addOperator(operatoree: .division)
+        calcultest.addNumber(numberText: "2")
+        calcultest.total()
+        XCTAssert(calcultest.text == "4 ÷ 2 = 2.0")
+    }
     
+    func testGivenWhenAddOperatorPlusandMultiply_WhenCalculate_resultMultiplyFirst() {
+        calcultest.addNumber(numberText: "2")
+        calcultest.addOperator(operatoree: .addition)
+        calcultest.addNumber(numberText: "4")
+        calcultest.addOperator(operatoree: .multiplication)
+        calcultest.addNumber(numberText: "4")
+        calcultest.total()
+        XCTAssert(calcultest.text == "2 + 4 * 4 = 18")
+    }
     /// reset button test
     func testGivenWhenACButtonPressed_textViewIsEmpty() {
         calcultest.addNumber(numberText: "4")
         calcultest.addOperator(operatoree: .division)
         calcultest.refresh()
-         XCTAssert(calcultest.text == "")
-        
+        XCTAssert(calcultest.text == "")
     }
-    
     /// divide buy 0 test
     func testGivenWhenNumberIsDivideByZero_WhenCalculate_TexviewIsEmpty() {
         
@@ -78,30 +96,26 @@ class CalculateTestcase: XCTestCase {
         XCTAssert(calcultest.text == "")
     }
     
-  
     func testGivenCalculTextAddOperator_WhenTwoOperatorAreTapped_ThendNotificationAppear() {
         calcultest.addNumber(numberText: "2")
         calcultest.addOperator(operatoree: .subtraction)
         calcultest.addOperator(operatoree: .subtraction)
         XCTAssert(calcultest.text == "2 - ")
-     }
+    }
     
     func testGivenExpressionHaveEnoughElement_WhenMissElements_ThendNotificationAppear() {
         calcultest.addNumber(numberText: "5")
         calcultest.total()
-         XCTAssert(calcultest.text == "5")
-       
+        XCTAssert(calcultest.text == "5")
     }
-  
+    
     func testGivenAddOperator_WhenOperationHaveResult_ThenShouldNotification() {
         calcultest.addNumber(numberText: "1")
-              calcultest.addOperator(operatoree: .addition)
-              calcultest.addNumber(numberText: "1")
-              calcultest.total()
-         calcultest.addOperator(operatoree: .addition)
-              XCTAssert(calcultest.text == "1 + 1 = 2 + ")
-        
-
+        calcultest.addOperator(operatoree: .addition)
+        calcultest.addNumber(numberText: "1")
+        calcultest.total()
+        calcultest.addOperator(operatoree: .addition)
+        XCTAssert(calcultest.text == "1 + 1 = 2 + ")
     }
     
     func testGivenCalculisOneUndreedDivideBy3_WhenCalculate_ResultIsMultipleElementAfterVirgule() {
@@ -112,6 +126,18 @@ class CalculateTestcase: XCTestCase {
         XCTAssert(calcultest.text == "100 ÷ 3 = 33.333333333333336")
     }
     
+    func testGivenCalculIsOneAndTenZeroPLusOneAndTenZero_WhenCalculate_AllTheResultiSDisplay() {
+        calcultest.addNumber(numberText: "10000000000")
+        calcultest.addOperator(operatoree: .addition)
+        calcultest.addNumber(numberText: "10000000000")
+        calcultest.total()
+        XCTAssert(calcultest.text == "10000000000 + 10000000000 = 20000000000.0")
+    }
     
-    // ajouter le test des grands nombre 
+    func testGivenWhenAddNumberandOperator_WhenCalculate_resultdisplayAlert() {
+        calcultest.addNumber(numberText: "8")
+        calcultest.addOperator(operatoree: .addition)
+        calcultest.total()
+        XCTAssert(calcultest.text == "8 + ")
+    }
 }
