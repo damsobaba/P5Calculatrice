@@ -32,6 +32,9 @@ class CalculateTestcase: XCTestCase {
         XCTAssert(calcultest.text == "6")
     }
     
+    // MARK: - test operators
+    
+    
     /// add operateur plus test
     func testGivenCalculIsOnePlusOne_WhenCalculate_resultIsTwo() {
         calcultest.addNumber(numberText: "1")
@@ -95,7 +98,7 @@ class CalculateTestcase: XCTestCase {
         calcultest.total()
         XCTAssert(calcultest.text == "")
     }
-    
+    // MARK: - testing Notification
     func testGivenCalculTextAddOperator_WhenTwoOperatorAreTapped_ThendNotificationAppear() {
         calcultest.addNumber(numberText: "2")
         calcultest.addOperator(operatoree: .subtraction)
@@ -109,6 +112,13 @@ class CalculateTestcase: XCTestCase {
         XCTAssert(calcultest.text == "5")
     }
     
+    func testGivenWhenAddNumberandOperator_WhenCalculate_resultdisplayAlert() {
+        calcultest.addNumber(numberText: "8")
+        calcultest.addOperator(operatoree: .addition)
+        calcultest.total()
+        XCTAssert(calcultest.text == "8 + ")
+    }
+    
     func testGivenAddOperator_WhenOperationHaveResult_ThenShouldNotification() {
         calcultest.addNumber(numberText: "1")
         calcultest.addOperator(operatoree: .addition)
@@ -117,6 +127,7 @@ class CalculateTestcase: XCTestCase {
         calcultest.addOperator(operatoree: .addition)
         XCTAssert(calcultest.text == "1 + 1 = 2 + ")
     }
+    // MARK: - testing formateur
     
     func testGivenCalculisOneUndreedDivideBy3_WhenCalculate_ResultIsMultipleElementAfterVirgule() {
         calcultest.addNumber(numberText: "100")
@@ -134,10 +145,5 @@ class CalculateTestcase: XCTestCase {
         XCTAssert(calcultest.text == "10000000000 + 10000000000 = 20000000000.0")
     }
     
-    func testGivenWhenAddNumberandOperator_WhenCalculate_resultdisplayAlert() {
-        calcultest.addNumber(numberText: "8")
-        calcultest.addOperator(operatoree: .addition)
-        calcultest.total()
-        XCTAssert(calcultest.text == "8 + ")
-    }
+
 }
