@@ -8,6 +8,9 @@
 
 import Foundation
 
+
+// MARK: - Protocol
+
 protocol AlertDeleguate {
     func alertMessage(text: String)
     func updateCalcul(result: String)
@@ -17,12 +20,17 @@ class Calculate {
     var delegate: AlertDeleguate?
     var zero = 0
     
+    
+    //MARK: -Enum
+    
     enum operators: String {
         case addition = "+"
         case subtraction = "-"
         case multiplication = "*"
         case division = "÷"
     }
+    
+    //MARK: - Propreties
     
     var text = String() {
         didSet {
@@ -35,42 +43,42 @@ class Calculate {
     }
     
     
-    // Error check computed variables
+    ///Checks if the last element of the expression is a math operator
     var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "÷"
     }
-    
+    /// check if there is enought element to caculate
     var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
-    
+    /// check if the last element is not a operator
     var canAddOperator: Bool {
-    return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "÷"
+        return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "÷"
     }
-    
+    /// check if  there is element to calculate
     var expressionHaveResult: Bool {
         return text.firstIndex(of: "=") != nil
     }
-    
-    var divideByZero: Bool {
+    /// check if attempt to divide by 0
+    private  var divideByZero: Bool {
         return text.contains("÷ 0")
     }
     
     
+    // MARK: - Methods
     
+    /// add number to calculation
     func addNumber(numberText: String)  {
-        
         if expressionHaveResult {
-            text = ""
-        }
+            text = ""  }
         text.append(numberText)
     }
     
+    /// append a opeator
     func addOperator(operatoree:operators)  {
         if expressionHaveResult || text.isEmpty {
             delegate?.alertMessage(text: "Vous ne pouvez pas ajouter d'operateur ")
-           
-        }
+        } // check if a operator can be added
         if canAddOperator {
             text.append(" " + operatoree.rawValue + " ")
             
@@ -81,11 +89,13 @@ class Calculate {
         }
     }
     
+    /// reset text view
     func refresh ()   {
         text = ""
     }
     
-    func priority(expression: [String]) -> [String] {
+    /// check the order of calculation
+    private  func priority(expression: [String]) -> [String] {
         var priorExpression: [String] = expression
         
         while priorExpression.contains("*") || priorExpression.contains("÷") {
@@ -105,11 +115,11 @@ class Calculate {
                 priorExpression.remove(at: index)
                 
             }
-            
         }
         return priorExpression
     }
     
+    /// display total result of calculation
     func total()  {
         guard expressionIsCorrect else {
             delegate?.alertMessage(text: "Entrez une expréssion correcte!")
@@ -125,28 +135,24 @@ class Calculate {
             text = ""
             return
         }
-        // Create local copy of operations
         var operationsToReduce = priority(expression: elements)
         while operationsToReduce.count > 1 {
-            let left = Double(operationsToReduce[0])! // debalé correctement
+            let left = Double(operationsToReduce[0])!
             let operand = operationsToReduce[1]
-            let right = Double(operationsToReduce[2])! // debalé correctement
+            let right = Double(operationsToReduce[2])!
             let result: Double
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
             default: return
             }
-            
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
             operationsToReduce.insert(formatResult(result: Double(result)), at: 0)
-         
         }
-        
         text.append(" = \(operationsToReduce.first!)")
     }
     
-     //// alow long numbers display
+    //// alow long numbers display
     private func formatResult(result: Double) -> String {
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 3
@@ -159,9 +165,7 @@ class Calculate {
         return resultFormated
     }
 }
-
-
-
-// question pour seb :
-// NSnumber,  numberformateur reussir a avoir les 100% coverage
-
+// scenedelegate essentiel ?
+// pas sur d avoir forké 
+// que faire de l ancienne version dans le dossier ? 
+//avoir uikit dans le model
