@@ -44,3 +44,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+// scenedelegate essentiel ?
+// pas sur d avoir forké
+// que faire de l ancienne version dans le dossier ?
+//avoir uikit dans le model
+
