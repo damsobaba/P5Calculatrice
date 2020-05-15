@@ -31,66 +31,54 @@ class Calculate {
     }
     //MARK: - Propreties
     
-     ///Contains the expression
+    ///Contains the expression
     var text = String() {
         didSet {
             delegate?.updateCalcul(result: text)
         }
     }
     ///This array contains each element of the expression
-//    private var elements: [String] {
-//        return text.split(separator: " ").map { "\($0)" }
-//
-//    }
     private var elements: [String] {
-           var elements =  text.split(separator: " ").map { "\($0)" }
+        var elements =  text.split(separator: " ").map { "\($0)" }
         if elements.first == "-" {
             elements[1] = "-" + elements[1]
             elements.removeFirst()
         }
-           return elements
-       }
+        return elements
+    }
     
     ///Checks if the last element of the expression is a math operator
     private var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "*" && elements.last != "÷" &&  elements.last != "-"
     }
     /// check if there is enought element to caculate
-   private  var expressionHaveEnoughElement: Bool {
+    private  var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
-  
-   
+    
     /// check if  there is element to calculate
     private var expressionHaveResult: Bool {
         return text.firstIndex(of: "=") != nil
     }
     
-    func  startingWithWrongOperator() {
-        var operation = elements
-       if (operation[0]) == operators.subtraction.rawValue {
-                   operation.remove(at: 0)
-
-               }
-             
-    }
-    private func isStartingWithWrongOperator(mathOperator: operators) -> Bool {
-          return text.isEmpty && (mathOperator == operators.multiplication || mathOperator == operators.division)
-      }
     /// check if attempt to divide by 0
     private  var divideByZero: Bool {
         return text.contains("÷ 0")
     }
     
-    
     // MARK: - Methods
+    
+    /// reset text view
+       func refresh ()   {
+           text = ""
+       }
     
     /// add number to calculation
     func addNumber(numberText: String)  {
         if expressionHaveResult {
             text = ""  }
         text.append(numberText)
-       
+        
     }
     /// append a opeator
     func addOperator(operatoree:operators)  {
@@ -100,18 +88,13 @@ class Calculate {
         if (expressionIsCorrect && !text.isEmpty) || (text.isEmpty && operatoree == .subtraction)  {
             text.append(" " + operatoree.rawValue + " ")
         } else {
-            delegate?.alertMessage(text: "un opérateur est déja mis ")
+            delegate?.alertMessage(text: "le calcul ne peut pas commencer par cet operateur ")
         }
-       
-    }
-    
-    /// reset text view
-    func refresh ()   {
-        text = ""
+        
     }
     
     /// check the order of calculation
-  private func priority(expression: [String]) -> [String] {
+    private func priority(expression: [String]) -> [String] {
         var priorExpression: [String] = expression // car on ne peut pas modifié la constante en parametre
         
         while priorExpression.contains("*") || priorExpression.contains("÷") {
@@ -129,7 +112,7 @@ class Calculate {
                 priorExpression[index - 1] = String(calcul)// enleve les anciens elements et met le resultat
                 priorExpression.remove(at: index + 1)
                 priorExpression.remove(at: index)
-             
+                
             }
         }
         return priorExpression
@@ -143,7 +126,7 @@ class Calculate {
         }
         guard expressionHaveEnoughElement else {
             delegate?.alertMessage(text: "Démarrez un nouveau calcul")
-          return
+            return
         }
         guard !divideByZero else {
             delegate?.alertMessage(text: "La division par zéro n'existe pas")
@@ -153,39 +136,23 @@ class Calculate {
         var operationsToReduce = priority(expression: elements)
         while operationsToReduce.count > 1 {
             print("\(elements[1])")
-           
-             
-       startingWithWrongOperator()
-          
-      
-            
-           // let minusleft = -Double(operationsToReduce[0])!
-           guard let left = Double(operationsToReduce[0]) else {  delegate?.alertMessage(text: "le calcul ne peut pas commencer par cet opérateur")
+            guard let left = Double(operationsToReduce[0]) else {  delegate?.alertMessage(text: "le calcul ne peut pas commencer par cet opérateur")
                 return }
-//            if (operationsToReduce[0]) == operators.subtraction.rawValue {
-//                left = -Double(operationsToReduce[0])!
-//
-//            }
-            
             let operand = operationsToReduce[1]
-            guard let right = Double(operationsToReduce[2]) else {return }
-
-           var result: Double
+            guard let right = Double(operationsToReduce[2]) else { return }
+            var result: Double
             switch operand {
-        
             case "+": result = left + right
             case "-": result = left - right
-          
             default: return
             }
-         
-            
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            
             operationsToReduce.insert("\(result)", at: 0)
+            
         }
-        text.append(" = \(formatResult(result: Double(operationsToReduce.first!)!))")
-       
+        guard (operationsToReduce.first != nil) else { return }
+        
+        text.append(" = \(formatResult(result:Double(operationsToReduce.first!)!))")
     }
     ////  reduce number of digit display
     private func formatResult(result: Double) -> String {
@@ -198,3 +165,4 @@ class Calculate {
 }
 
 // ajouter canaddoperator
+//ajouter icone et lunchscreen

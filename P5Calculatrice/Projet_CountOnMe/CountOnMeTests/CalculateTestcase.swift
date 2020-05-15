@@ -63,7 +63,7 @@ class CalculateTestcase: XCTestCase {
         calcultest.addOperator(operatoree: .multiplication)
         calcultest.addNumber(numberText: "2")
         calcultest.total()
-        XCTAssert(calcultest.text == "2 * 2 = 4.0")
+        XCTAssert(calcultest.text == "2 * 2 = 4")
         
     }
     
@@ -73,7 +73,7 @@ class CalculateTestcase: XCTestCase {
         calcultest.addOperator(operatoree: .division)
         calcultest.addNumber(numberText: "2")
         calcultest.total()
-        XCTAssert(calcultest.text == "4 ÷ 2 = 2.0")
+        XCTAssert(calcultest.text == "4 ÷ 2 = 2")
     }
     /// test priority operator
     func testGivenWhenAddOperatorPlusandMultiply_WhenCalculate_resultMultiplyFirst() {
@@ -138,7 +138,7 @@ class CalculateTestcase: XCTestCase {
         calcultest.addOperator(operatoree: .division)
         calcultest.addNumber(numberText: "3")
         calcultest.total()
-        XCTAssert(calcultest.text == "100 ÷ 3 = 33.333333333333336")
+        XCTAssert(calcultest.text == "100 ÷ 3 = 33.333")
     }
     /// test  displaying large number calculation
     func testGivenCalculIsOneAndTenZeroPLusOneAndTenZero_WhenCalculate_AllTheResultiSDisplay() {
@@ -146,8 +146,16 @@ class CalculateTestcase: XCTestCase {
         calcultest.addOperator(operatoree: .addition)
         calcultest.addNumber(numberText: "10000000000")
         calcultest.total()
-        XCTAssert(calcultest.text == "10000000000 + 10000000000 = 20000000000.0")
+        XCTAssert(calcultest.text == "10000000000 + 10000000000 = 20000000000")
     }
     
+    func testGivenIfFirstElementsIsOpereratorSubstaction_WhenCalculate_ResultIsCorrect() {
+        calcultest.addOperator(operatoree: .subtraction)
+        calcultest.addNumber(numberText: "8")
+        calcultest.addOperator(operatoree: .addition)
+        calcultest.addNumber(numberText: "4")
+        calcultest.total()
+        XCTAssert(calcultest.text == " - 8 + 4 = -4")
+    }
 
 }
