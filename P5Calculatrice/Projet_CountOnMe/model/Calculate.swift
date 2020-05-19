@@ -51,6 +51,11 @@ class Calculate {
     private var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "*" && elements.last != "÷" &&  elements.last != "-"
     }
+    
+    var canAddOperator: Bool {
+           return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "÷"
+       }
+       
     /// check if there is enought element to caculate
     private  var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
@@ -82,10 +87,10 @@ class Calculate {
     }
     /// append a opeator
     func addOperator(operatoree:operators)  {
-        if expressionHaveResult {// || text.isEmpty {
+        if expressionHaveResult {
             delegate?.alertMessage(text: "Vous ne pouvez pas ajouter d'operateur ")
         } // check if a operator can be added
-        if (expressionIsCorrect && !text.isEmpty) || (text.isEmpty && operatoree == .subtraction)  {
+        if (expressionIsCorrect && canAddOperator && !text.isEmpty) || (text.isEmpty && operatoree == .subtraction)  {
             text.append(" " + operatoree.rawValue + " ")
         } else {
             delegate?.alertMessage(text: "le calcul ne peut pas commencer par cet operateur ")
@@ -136,7 +141,7 @@ class Calculate {
         var operationsToReduce = priority(expression: elements)
         while operationsToReduce.count > 1 {
             print("\(elements[1])")
-            guard let left = Double(operationsToReduce[0]) else {  delegate?.alertMessage(text: "le calcul ne peut pas commencer par cet opérateur")
+            guard let left = Double(operationsToReduce[0]) else {  delegate?.alertMessage(text: "Le calcul ne peut pas commencer par cet opérateur")
                 return }
             let operand = operationsToReduce[1]
             guard let right = Double(operationsToReduce[2]) else { return }
@@ -156,7 +161,7 @@ class Calculate {
     }
     ////  reduce number of digit display
     private func formatResult(result: Double) -> String {
-        let formatter = NumberFormatter()// reduce the nuimber of digit display on result
+        let formatter = NumberFormatter()// reduce the number of digit display on result
         formatter.maximumFractionDigits = 3
         formatter.minimumFractionDigits = 0
         guard let resultFormated = formatter.string(from: NSNumber(value: result)) else { return String() }
@@ -164,5 +169,3 @@ class Calculate {
     }
 }
 
-// ajouter canaddoperator
-//ajouter icone et lunchscreen
