@@ -8,17 +8,18 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
-    //MARK: - Outlest
-    @IBOutlet weak var textView: UITextView!
-    @IBOutlet var numberButtons: [UIButton]!
-    @IBOutlet weak var resetView: UIButton!
+    // MARK: - Outlest
     
-    //MARK: - Propretie
-    var calculate = Calculate()
+    @IBOutlet private weak var textView: UITextView!
     
-    //MARK: - Methode
+    // MARK: - Propretie
+    
+    private let calculate = Calculate()
+    
+    // MARK: - View life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         calculate.delegate = self
@@ -26,40 +27,39 @@ class ViewController: UIViewController {
     
     // MARK: - Actions
     
-    @IBAction func resetButton(_ sender: Any) {
-        
+    @IBAction private func resetButton(_ sender: Any) {
         calculate.refresh()
     }
     
-    @IBAction func tappedNumberButton(_ sender: UIButton) {
-        guard let numberText = sender.title(for: .normal) else {
-            return
-        }
+    @IBAction private func tappedNumberButton(_ sender: UIButton) {
+        guard let numberText = sender.title(for: .normal) else { return }
         calculate.addNumber(numberText: numberText)
     }
     
-    @IBAction func tappedAdditionButon(_ sender: Any) {
+    @IBAction private func tappedAdditionButon(_ sender: Any) {
         calculate.addOperator(operatoree: .addition)
     }
    
-    @IBAction func tappedSunbstractionButton(_ sender: Any) {
+    @IBAction private func tappedSunbstractionButton(_ sender: Any) {
         calculate.addOperator(operatoree: .subtraction)
     }
     
-    @IBAction func tappedMultiplicationButton(_ sender: Any) {
+    @IBAction private func tappedMultiplicationButton(_ sender: Any) {
         calculate.addOperator(operatoree: .multiplication)
     }
     
-    @IBAction func tappedDivisionButton(_ sender: Any) {
+    @IBAction private func tappedDivisionButton(_ sender: Any) {
         calculate.addOperator(operatoree: .division)
     }
     
-    @IBAction func tappedEqualButton(_ sender: Any) {
+    @IBAction private func tappedEqualButton(_ sender: Any) {
         calculate.total()
     }
 }
+
 // MARK: - Extansion
-extension ViewController: AlertDeleguate {
+
+extension ViewController: DisplayDelegate {
     ///Assigns the value of the given String to textView.text
     func updateCalcul(result: String) {
         textView.text = result
@@ -68,7 +68,7 @@ extension ViewController: AlertDeleguate {
     func alertMessage(text: String) {
         let alertVC = UIAlertController(title: "Zéro!", message: text, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        self.present(alertVC, animated: true, completion: nil)
+        present(alertVC, animated: true, completion: nil)
     }
 }
 

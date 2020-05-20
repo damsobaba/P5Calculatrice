@@ -11,15 +11,13 @@ import Foundation
 
 // MARK: - Protocol
 
-protocol AlertDeleguate {
+protocol DisplayDelegate: class {
     func alertMessage(text: String)
     func updateCalcul(result: String)
 }
 
-class Calculate {
-    var delegate: AlertDeleguate?
-    var zero = 0
-    
+final class Calculate {
+    weak var delegate: DisplayDelegate?
     
     //MARK: -Enum
     
@@ -29,14 +27,17 @@ class Calculate {
         case multiplication = "*"
         case division = "÷"
     }
+    
     //MARK: - Propreties
     
-    ///Contains the expression
+    /// change text when modify 
     var text = String() {
         didSet {
             delegate?.updateCalcul(result: text)
         }
     }
+    
+    
     ///This array contains each element of the expression
     private var elements: [String] {
         var elements =  text.split(separator: " ").map { "\($0)" }
@@ -52,10 +53,10 @@ class Calculate {
         return elements.last != "+" && elements.last != "*" && elements.last != "÷" &&  elements.last != "-"
     }
     
-    var canAddOperator: Bool {
-           return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "÷"
-       }
-       
+    private var canAddOperator: Bool {
+        return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "÷"
+    }
+    
     /// check if there is enought element to caculate
     private  var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
@@ -74,17 +75,17 @@ class Calculate {
     // MARK: - Methods
     
     /// reset text view
-       func refresh ()   {
-           text = ""
-       }
+    func refresh ()   {
+        text = ""
+    }
     
     /// add number to calculation
     func addNumber(numberText: String)  {
         if expressionHaveResult {
             text = ""  }
         text.append(numberText)
-        
     }
+    
     /// append a opeator
     func addOperator(operatoree:operators)  {
         if expressionHaveResult {
@@ -95,29 +96,25 @@ class Calculate {
         } else {
             delegate?.alertMessage(text: "le calcul ne peut pas commencer par cet operateur ")
         }
-        
     }
     
     /// check the order of calculation
     private func priority(expression: [String]) -> [String] {
-        var priorExpression: [String] = expression // car on ne peut pas modifié la constante en parametre
-        
+        var priorExpression: [String] = expression //because we can't modify the constant in parameter
         while priorExpression.contains("*") || priorExpression.contains("÷") {
             if let index = priorExpression.firstIndex(where: {$0 == "*" || $0 == "÷" } ) {
                 let operand = priorExpression[index]
                 guard let leftSide = Double(priorExpression[index - 1]) else { return [] }
                 guard let rightSide = Double(priorExpression[index + 1]) else { return [] }
-                
                 let calcul: Double
                 if operand == "*" {
                     calcul = leftSide * rightSide
                 } else {
                     calcul = leftSide / rightSide
                 }
-                priorExpression[index - 1] = String(calcul)// enleve les anciens elements et met le resultat
-                priorExpression.remove(at: index + 1)
+                priorExpression[index - 1] = String(calcul)// display the result
+                priorExpression.remove(at: index + 1) // remove the others elements
                 priorExpression.remove(at: index)
-                
             }
         }
         return priorExpression
@@ -153,11 +150,10 @@ class Calculate {
             }
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
             operationsToReduce.insert("\(result)", at: 0)
-            
         }
-        guard (operationsToReduce.first != nil) else { return }
-        
-        text.append(" = \(formatResult(result:Double(operationsToReduce.first!)!))")
+        guard let result = operationsToReduce.first else { return }
+        guard let resultDoubled = Double(result) else { return }
+        text.append(" = \(formatResult(result:resultDoubled))")
     }
     ////  reduce number of digit display
     private func formatResult(result: Double) -> String {
